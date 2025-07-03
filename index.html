@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أطلس ليبيا السياحي - لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2980b9;
+            --accent-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-left: 15px;
+        }
+        
+        .title {
+            text-align: right;
+        }
+        
+        .title h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .title p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        /* Main Layout */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 82px);
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 0;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+        
+        .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .menu-item i {
+            margin-left: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .submenu {
+            list-style: none;
+            padding-right: 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .submenu.show {
+            max-height: 500px;
+        }
+        
+        .submenu-item {
+            padding: 0.6rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submenu-item:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: var(--light-color);
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title h2 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+        }
+        
+        .dashboard-title p {
+            color: #7f8c8d;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            width: 200px;
+        }
+        
+        .search-bar i {
+            color: #7f8c8d;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .stat-card p {
+            color: #7f8c8d;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 300px;
+        }
+        
+        /* Recent Activity */
+        .activity-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h3 {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+        }
+        
+        .section-header a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .activity-table th, .activity-table td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-table th {
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+        }
+        
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status.active {
+            background-color: #d5f5e3;
+            color: var(--success-color);
+        }
+        
+        .status.pending {
+            background-color: #fef9e7;
+            color: var(--accent-color);
+        }
+        
+        .status.inactive {
+            background-color: #fadbd8;
+            color: var(--danger-color);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .action-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .action-card:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-5px);
+        }
+        
+        .action-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-card h4 {
+            font-size: 1.1rem;
+        }
+        
+        /* Loading and Error Styles */
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        .error-container {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .error-alert {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .error-alert i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .retry-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .retry-btn:hover {
+            background: #c0392b;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--danger-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="libya-logo.png" alt="ليبيا" class="logo">
+            <div class="title">
+                <h1>دولة ليبيا</h1>
+                <p>وزارة السياحة والصناعات التقليدية<br>مركز المعلومات والتوثيق السياحي<br>أطلس ليبيا السياحي</p>
+            </div>
+        </div>
+        <div class="user-info">
+            <div>
+                <h4>مرحبًا،</h4>
+                <p>مدير النظام</p>
+            </div>
+            <img src="user-avatar.png" alt="صورة المستخدم">
+        </div>
+    </header>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-hotel"></i>
+                    <span>الفنادق</span>
+                    <i class="fas fa-chevron-down"></i>
+                </li>
+                <ul class="submenu">
+                    <li class="submenu-item">الفنادق المصنفة</li>
+                    <li class="submenu-item">الفنادق غير المصنفة</li>
+                    <li class="submenu-item">إضافة فندق جديد</li>
+                </ul>
+                <li class="menu-item">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <span>الشواطئ</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>المطاعم</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>المقاهي</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-landmark"></i>
+                    <span>المواقع الثقافية</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>المواقع السياحية</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-building"></i>
+                    <span>المكاتب</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>المشاريع</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>التقارير</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-users-cog"></i>
+                    <span>إدارة المستخدمين</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>الإعدادات</span>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="dashboard-title">
+                    <h2>لوحة التحكم</h2>
+                    <p>مرحبًا بك في نظام أطلس ليبيا السياحي</p>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="بحث..." id="searchInput">
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-hotel"></i>
+                    <h3 id="hotelsCount">0</h3>
+                    <p>إجمالي الفنادق</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <h3 id="beachesCount">0</h3>
+                    <p>الشواطئ</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-utensils"></i>
+                    <h3 id="restaurantsCount">0</h3>
+                    <p>المطاعم</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-landmark"></i>
+                    <h3 id="culturalSitesCount">0</h3>
+                    <p>المواقع الثقافية</p>
+                </div>
+            </div>
+            
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <canvas id="statsChart"></canvas>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h3>أحدث الإضافات</h3>
+                    <a href="#" id="viewAllActivities">عرض الكل</a>
+                </div>
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>النوع</th>
+                            <th>الاسم</th>
+                            <th>المدينة</th>
+                            <th>التصنيف</th>
+                            <th>الحالة</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTableBody">
+                        <!-- سيتم ملؤه بالبيانات -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="section-header">
+                <h3>إجراءات سريعة</h3>
+            </div>
+            <div class="quick-actions">
+                <div class="action-card" data-action="add-hotel">
+                    <i class="fas fa-plus-circle"></i>
+                    <h4>إضافة فندق جديد</h4>
+                </div>
+                <div class="action-card" data-action="add-beach">
+                    <i class="fas fa-plus-circle"></i>
+                    <h4>إضافة شاطئ جديد</h4>
+                </div>
+                <div class="action-card" data-action="add-restaurant">
+                    <i class="fas fa-plus-circle"></i>
+                    <h4>إضافة مطعم جديد</h4>
+                </div>
+                <div class="action-card" data-action="export-report">
+                    <i class="fas fa-file-export"></i>
+                    <h4>تصدير تقرير</h4>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div class="loading-indicator">
+        <div class="loading-spinner"></div>
+        <p>جاري تحميل البيانات...</p>
+    </div>
+    
+    <!-- Error Container -->
+    <div class="error-container"></div>
+    
+    <!-- Add Hotel Modal -->
+    <div class="modal" id="hotelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة فندق جديد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="hotelForm">
+                <div class="form-group">
+                    <label for="hotelName">اسم الفندق</label>
+                    <input type="text" id="hotelName" required>
+                </div>
+                <div class="form-group">
+                    <label for="hotelCity">المدينة</label>
+                    <input type="text" id="hotelCity" required>
+                </div>
+                <div class="form-group">
+                    <label for="hotelRating">التصنيف</label>
+                    <select id="hotelRating" required>
+                        <option value="">اختر التصنيف</option>
+                        <option value="1">نجمة واحدة</option>
+                        <option value="2">نجمتان</option>
+                        <option value="3">3 نجوم</option>
+                        <option value="4">4 نجوم</option>
+                        <option value="5">5 نجوم</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hotelStatus">الحالة</label>
+                    <select id="hotelStatus" required>
+                        <option value="active">نشط</option>
+                        <option value="pending">قيد المراجعة</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hotelDescription">الوصف</label>
+                    <textarea id="hotelDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Beach Modal -->
+    <div class="modal" id="beachModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة شاطئ جديد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="beachForm">
+                <div class="form-group">
+                    <label for="beachName">اسم الشاطئ</label>
+                    <input type="text" id="beachName" required>
+                </div>
+                <div class="form-group">
+                    <label for="beachCity">المدينة</label>
+                    <input type="text" id="beachCity" required>
+                </div>
+                <div class="form-group">
+                    <label for="beachType">نوع الشاطئ</label>
+                    <select id="beachType" required>
+                        <option value="public">عام</option>
+                        <option value="private">خاص</option>
+                        <option value="resort">منتجع</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="beachStatus">الحالة</label>
+                    <select id="beachStatus" required>
+                        <option value="active">نشط</option>
+                        <option value="pending">قيد المراجعة</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="beachDescription">الوصف</label>
+                    <textarea id="beachDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Restaurant Modal -->
+    <div class="modal" id="restaurantModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة مطعم جديد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="restaurantForm">
+                <div class="form-group">
+                    <label for="restaurantName">اسم المطعم</label>
+                    <input type="text" id="restaurantName" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantCity">المدينة</label>
+                    <input type="text" id="restaurantCity" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantCuisine">نوع المطبخ</label>
+                    <select id="restaurantCuisine" required>
+                        <option value="libyan">ليبي</option>
+                        <option value="arabic">عربي</option>
+                        <option value="international">دولي</option>
+                        <option value="italian">إيطالي</option>
+                        <option value="turkish">تركي</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantStatus">الحالة</label>
+                    <select id="restaurantStatus" required>
+                        <option value="active">نشط</option>
+                        <option value="pending">قيد المراجعة</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantDescription">الوصف</label>
+                    <textarea id="restaurantDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تصدير تقرير</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="exportForm">
+                <div class="form-group">
+                    <label for="exportType">نوع التقرير</label>
+                    <select id="exportType" required>
+                        <option value="all">جميع البيانات</option>
+                        <option value="hotels">الفنادق فقط</option>
+                        <option value="beaches">الشواطئ فقط</option>
+                        <option value="restaurants">المطاعم فقط</option>
+                        <option value="cultural">المواقع الثقافية فقط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exportFormat">صيغة الملف</label>
+                    <select id="exportFormat" required>
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exportDateRange">الفترة الزمنية</label>
+                    <select id="exportDateRange">
+                        <option value="all">كل البيانات</option>
+                        <option value="last_week">الأسبوع الماضي</option>
+                        <option value="last_month">الشهر الماضي</option>
+                        <option value="last_year">السنة الماضية</option>
+                        <option value="custom">مخصص</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">تصدير</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
